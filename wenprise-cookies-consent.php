@@ -120,10 +120,10 @@ function wprs_cc_add_cookie_notice() {
                     <?php echo esc_html($notice_text); ?>
                 </p>
                 <div class="wprs-cc-notice-buttons">
-                    <button onclick="wprsccAcceptCookies()" class="wprs-cc-accept-button">
+                    <button id="wprs-cc-accept-button" class="wprs-cc-accept-button">
                         <?php echo esc_html__('Accept', 'wenprise-cookies-consent'); ?>
                     </button>
-                    <button onclick="wprsccCloseCookieNotice()" class="wprs-cc-close-button">
+                    <button id="wprs-cc-close-button" class="wprs-cc-close-button">
                         <?php echo esc_html__('Close', 'wenprise-cookies-consent'); ?>
                     </button>
                 </div>
@@ -131,19 +131,35 @@ function wprs_cc_add_cookie_notice() {
         </div>
 
         <script>
-        function wprsccAcceptCookies() {
-            let date = new Date();
-            date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
-            document.cookie = "wprs_cc_notice_accepted=1; expires=" + date.toUTCString() + "; path=/";
-            document.getElementById('wprs-cc-notice').style.display = 'none';
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取按钮元素
+            const acceptButton = document.getElementById('wprs-cc-accept-button');
+            const closeButton = document.getElementById('wprs-cc-close-button');
+            
+            // 添加点击事件监听器
+            if (acceptButton) {
+                acceptButton.addEventListener('click', wprsccAcceptCookies);
+            }
+            
+            if (closeButton) {
+                closeButton.addEventListener('click', wprsccCloseCookieNotice);
+            }
+            
+            // 定义函数
+            function wprsccAcceptCookies() {
+                let date = new Date();
+                date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+                document.cookie = "wprs_cc_notice_accepted=1; expires=" + date.toUTCString() + "; path=/";
+                document.getElementById('wprs-cc-notice').style.display = 'none';
+            }
 
-        function wprsccCloseCookieNotice() {
-            let date = new Date();
-            date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
-            document.cookie = "wprs_cc_notice_accepted=1; expires=" + date.toUTCString() + "; path=/";
-            document.getElementById('wprs-cc-notice').style.display = 'none';
-        }
+            function wprsccCloseCookieNotice() {
+                let date = new Date();
+                date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
+                document.cookie = "wprs_cc_notice_accepted=1; expires=" + date.toUTCString() + "; path=/";
+                document.getElementById('wprs-cc-notice').style.display = 'none';
+            }
+        });
         </script>
         <?php
     }
